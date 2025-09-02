@@ -41,12 +41,36 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+# ============================================================================
+# MAIN SYNTHETIC DATA GENERATOR CLASS
+# ============================================================================
+
 class UltraRealisticSyntheticDataGenerator:
-    """Generate realistic synthetic basketball fan data with behavioral modeling."""
-class UltraRealisticSyntheticDataGenerator:
-    """Generate extremely realistic synthetic basketball fan data with advanced behavioral modeling."""
+    """
+    Generate extremely realistic synthetic basketball fan data with advanced behavioral modeling.
+    
+    This class creates synthetic data that closely mimics real-world basketball fan behavior
+    by incorporating over 20 realistic factors including economics, team performance,
+    seasonality, demographics, and social influences.
+    
+    Key Features:
+    - Ultra-realistic customer segmentation (casual, regular, avid, super_fan)
+    - Economic timeline modeling (recessions, inflation, unemployment)
+    - Team-specific loyalty and market dynamics
+    - Superstar player impact and championship effects
+    - Advanced churn psychology modeling
+    - Multi-generational technology adoption patterns
+    
+    Args:
+        random_seed (Optional[int]): Seed for reproducible data generation
+        
+    Example:
+        generator = UltraRealisticSyntheticDataGenerator(random_seed=42)
+        data = generator.generate_all_data()
+    """
     
     def __init__(self, random_seed: Optional[int] = None):
+        """Initialize the synthetic data generator with configuration and random seed."""
         self.config = load_config()
         synthetic_config = self.config['data']['synthetic']
         self.num_customers = synthetic_config['n_customers']
@@ -65,7 +89,9 @@ class UltraRealisticSyntheticDataGenerator:
         np.random.seed(self.random_seed)
         random.seed(self.random_seed)
         
-        # Economic timeline (realistic economic events through 2025)
+        # ================================================================
+        # ECONOMIC TIMELINE DATA - Real-world economic events and impacts
+        # ================================================================
         self.economic_timeline = {
             '2021-01': {'recession_factor': 1.0, 'inflation': 0.02, 'unemployment': 0.063},
             '2021-06': {'recession_factor': 0.95, 'inflation': 0.025, 'unemployment': 0.055},  # COVID recovery
@@ -137,7 +163,11 @@ class UltraRealisticSyntheticDataGenerator:
             'west': {'winter_impact': 1.0, 'summer_boost': 0.98, 'wildfire_season': 0.92}
         }
 
-        # Define NBA teams with MUCH more detailed characteristics
+        # ================================================================
+        # NBA TEAM CONFIGURATIONS - Detailed team characteristics and market data
+        # ================================================================
+        # Each team includes: market size, recent success, fan loyalty, ticket prices,
+        # social media following, bandwagon factor, celebrity endorsements, etc.
         self.nba_teams = {
             'ATL': {
                 'city': 'Atlanta', 'market_size': 'large', 'recent_success': 'medium', 'fanbase_loyalty': 0.6,
@@ -332,7 +362,14 @@ class UltraRealisticSyntheticDataGenerator:
         # Get segment configurations from config
         segments = synthetic_config['segments']
         
-        # Enhanced customer segments with ULTRA-realistic psychological profiles
+        # ================================================================
+        # CUSTOMER SEGMENT CONFIGURATIONS - Psychological and behavioral profiles
+        # ================================================================
+        # Four distinct fan segments with realistic psychological factors:
+        # - casual: Price-sensitive, high churn, social media driven
+        # - regular: Balanced engagement, moderate loyalty 
+        # - avid: Strong team loyalty, family-oriented, consistent spending
+        # - super_fan: Premium tier, low churn, highest engagement
         self.segment_configs = {
             'casual': {
                 'weight': segments.get('casual', 0.4),
@@ -565,39 +602,75 @@ class UltraRealisticSyntheticDataGenerator:
             '65+': {'streaming': 0.20, 'mobile_first': 0.15, 'social_media': 0.15, 'crypto_aware': 0.01}
         }
 
-    # NEW HYPER-REALISTIC CALCULATION METHODS
+    # ================================================================
+    # BEHAVIORAL MODELING HELPER FUNCTIONS
+    # ================================================================
+    # These functions calculate various realistic factors that influence
+    # fan behavior: injuries, draft excitement, international stars,
+    # fantasy sports, viral moments, technology adoption, etc.
     
     def _get_injury_impact(self, team: str, year: int) -> float:
-        """Calculate injury/drama impact for a team in a given year."""
+        """
+        Calculate injury/drama impact for a team in a given year.
+        
+        Args:
+            team (str): NBA team code (e.g., 'LAL', 'BOS')
+            year (int): Year to check for injury impacts
+            
+        Returns:
+            float: Impact multiplier (1.0 = no impact, <1.0 = negative impact)
+        """
         if year in self.injury_timeline:
             for team_code, impact, _ in self.injury_timeline[year]:
                 if team == team_code:
-                    return 1.0 - impact  # Negative impact on engagement
-        return 1.0
+                    return 1.0 - impact  # Convert to negative impact on engagement
+        return 1.0  # No impact found
     
     def _get_draft_excitement(self, team: str, year: int) -> float:
-        """Calculate draft lottery excitement boost."""
+        """
+        Calculate draft lottery excitement boost for rebuilding teams.
+        
+        Args:
+            team (str): NBA team code
+            year (int): Draft year to check
+            
+        Returns:
+            float: Engagement boost multiplier (1.0+ = positive boost)
+        """
         if year in self.draft_events:
             draft_data = self.draft_events[year]
             if team in draft_data['lottery_teams']:
                 base_boost = draft_data['excitement_boost']
-                # Special Wembanyama factor for 2023
-                if year == 2023 and team == 'SA':
-                    return 1.0 + base_boost + draft_data.get('wemby_factor', 0)
+                # Special case: Wembanyama hype for Spurs in 2023
+                if year == 2023 and team == 'SAS':
+                    wemby_factor = draft_data.get('wemby_factor', 0)
+                    return 1.0 + base_boost + wemby_factor
                 return 1.0 + base_boost
-        return 1.0
+        return 1.0  # No draft excitement
     
     def _get_international_boost(self, team: str, year: int) -> float:
-        """Calculate international player popularity boost."""
+        """
+        Calculate international player popularity boost.
+        
+        Teams with popular international stars (Giannis, Luka, Jokic) get
+        engagement boosts, especially during their peak performance years.
+        
+        Args:
+            team (str): NBA team code
+            year (int): Year to check for international star impact
+            
+        Returns:
+            float: Engagement boost multiplier
+        """
         if team in self.international_stars:
             star_data = self.international_stars[team]
             if year in star_data['peak_years']:
                 boost = star_data['international_boost']
-                # Extra boost for rookie hype
+                # Extra boost for rookie hype (e.g., Wemby's rookie year)
                 if star_data.get('rookie_hype') and year == 2024:
                     boost *= 1.5
                 return 1.0 + boost
-        return 1.0
+        return 1.0  # No international star impact
     
     def _get_fantasy_gambling_effect(self, customer_data: Dict, year: int) -> float:
         """Calculate fantasy sports/gambling engagement effect."""
@@ -823,78 +896,136 @@ class UltraRealisticSyntheticDataGenerator:
         return np.clip(social_effect, 0.7, 1.5)  # Range: 0.7x to 1.5x
 
     def _calculate_realistic_churn_probability(self, customer_data: Dict, month_data: Dict) -> float:
-        """Calculate ultra-realistic churn probability based on multiple factors."""
-        segment_config = self.segment_configs[customer_data['segment']]
-        age_info = self.demographics['age_groups'][customer_data['age_group']]
+        """
+        Calculate ultra-realistic churn probability based on multiple behavioral factors.
         
-        # Base churn rate
+        This function models the complex psychology of fan churn by considering:
+        - Economic conditions (recession, inflation, unemployment)
+        - Team performance and fan loyalty
+        - Seasonal patterns and competition from other sports
+        - Social influence and viral moments
+        - Technology adoption frustration
+        - Pricing psychology
+        
+        Args:
+            customer_data (Dict): Customer profile including segment, demographics, preferences
+            month_data (Dict): Monthly context including economics, team performance, seasonality
+            
+        Returns:
+            float: Churn probability between 0 and 1
+        """
+        segment_config = self.segment_configs[customer_data['segment']]
         base_churn = segment_config['churn_base_rate']
         
-        # Time-based factors
-        months_since_signup = month_data['months_since_signup']
-        time_factor = 1.0 + (months_since_signup * 0.005)  # Gradual increase over time
+        # Calculate individual factor multipliers
+        time_multiplier = self._calculate_time_factor(month_data['months_since_signup'])
+        economic_multiplier = self._calculate_economic_factor(month_data['economic_factors'], segment_config)
+        team_multiplier = self._calculate_team_performance_factor(month_data['team_win_rate'], customer_data['team_loyalty_score'])
+        seasonal_multiplier = self._calculate_seasonal_factor(month_data['season_multiplier'], segment_config)
+        social_multiplier = self._calculate_social_factor(month_data['social_influence_effect'])
+        price_multiplier = self._calculate_price_factor(customer_data, segment_config)
+        competition_multiplier = self._calculate_competition_factor(month_data['calendar_month'])
         
-        # Economic factors
-        economic_factors = month_data['economic_factors']
-        recession_impact = 2.0 - economic_factors['recession_factor']  # Higher churn during recession
-        inflation_impact = 1.0 + (economic_factors['inflation'] - 0.02) * 2  # Inflation sensitivity
-        unemployment_impact = 1.0 + (economic_factors['unemployment'] - 0.04) * 3  # Unemployment sensitivity
+        # Advanced realistic factors
+        advanced_multipliers = self._calculate_advanced_churn_factors(customer_data, month_data)
+        
+        # Combine all factors
+        total_multiplier = (
+            time_multiplier * 
+            economic_multiplier * 
+            team_multiplier * 
+            seasonal_multiplier * 
+            social_multiplier * 
+            price_multiplier * 
+            competition_multiplier * 
+            advanced_multipliers
+        )
+        
+        # Calculate final churn probability
+        churn_probability = base_churn * total_multiplier
+        
+        # Apply realistic bounds and noise
+        churn_probability = np.clip(churn_probability, 0.001, 0.8)  # Min 0.1%, max 80%
+        churn_probability += np.random.normal(0, 0.01)  # Small random noise
+        
+        return max(0.0, min(1.0, churn_probability))
+    
+    def _calculate_time_factor(self, months_since_signup: int) -> float:
+        """Calculate time-based churn factor (gradual increase over time)."""
+        return 1.0 + (months_since_signup * 0.005)
+    
+    def _calculate_economic_factor(self, economic_factors: Dict, segment_config: Dict) -> float:
+        """Calculate economic impact on churn (recession, inflation, unemployment)."""
+        recession_impact = 2.0 - economic_factors['recession_factor']
+        inflation_impact = 1.0 + (economic_factors['inflation'] - 0.02) * 2
+        unemployment_impact = 1.0 + (economic_factors['unemployment'] - 0.04) * 3
         
         economic_multiplier = recession_impact * inflation_impact * unemployment_impact
-        economic_multiplier *= segment_config['recession_sensitivity']  # Some segments more sensitive
-        
-        # Team performance factors
-        team_performance = month_data['team_win_rate']
-        team_factor = 2.5 - (team_performance * 2.0)  # Poor performance increases churn
-        team_factor = team_factor ** customer_data['team_loyalty_score']  # Loyalty moderates impact
-        
-        # Seasonal factors
-        season_factor = 2.5 - month_data['season_multiplier']  # Offseason increases churn
-        season_factor *= segment_config['seasonal_sensitivity']
-        
-        # Social influence factors
-        social_factor = 2.0 - month_data['social_influence_effect']  # Negative social buzz increases churn
-        
-        # Price sensitivity factors
-        price_factor = 1.0
+        return economic_multiplier * segment_config['recession_sensitivity']
+    
+    def _calculate_team_performance_factor(self, team_win_rate: float, loyalty_score: float) -> float:
+        """Calculate team performance impact on churn (moderated by loyalty)."""
+        team_factor = 2.5 - (team_win_rate * 2.0)  # Poor performance increases churn
+        return team_factor ** loyalty_score  # Loyalty moderates impact
+    
+    def _calculate_seasonal_factor(self, season_multiplier: float, segment_config: Dict) -> float:
+        """Calculate seasonal churn factor (offseason increases churn)."""
+        season_factor = 2.5 - season_multiplier
+        return season_factor * segment_config['seasonal_sensitivity']
+    
+    def _calculate_social_factor(self, social_influence_effect: float) -> float:
+        """Calculate social influence impact on churn."""
+        return 2.0 - social_influence_effect  # Negative social buzz increases churn
+    
+    def _calculate_price_factor(self, customer_data: Dict, segment_config: Dict) -> float:
+        """Calculate price sensitivity impact on churn."""
         if customer_data.get('price_increase_this_year', False):
-            price_factor = 1.0 + (segment_config['price_sensitivity'] * 0.5)
-        
-        # Competitive factors (other sports, entertainment)
-        competition_factor = 1.0
-        calendar_month = month_data['calendar_month']
+            return 1.0 + (segment_config['price_sensitivity'] * 0.5)
+        return 1.0
+    
+    def _calculate_competition_factor(self, calendar_month: int) -> float:
+        """Calculate competitive sports impact on churn."""
         if calendar_month in [9, 10, 11]:  # NFL season overlap
-            competition_factor = 1.2
+            return 1.2
         elif calendar_month in [3, 4]:  # March Madness
-            competition_factor = 1.1
-        
-        # NEW HYPER-REALISTIC FACTORS
-        
-        # Injury/drama impact
+            return 1.1
+        return 1.0
+    
+    def _calculate_advanced_churn_factors(self, customer_data: Dict, month_data: Dict) -> float:
+        """Calculate advanced realistic churn factors (injuries, draft, viral moments, etc.)."""
         year = month_data['year']
-        injury_factor = self._get_injury_impact(customer_data['favorite_team'], year)
+        calendar_month = month_data['calendar_month']
+        favorite_team = customer_data['favorite_team']
         
-        # Draft excitement (reduces churn for lottery teams)
-        draft_factor = 2.0 - self._get_draft_excitement(customer_data['favorite_team'], year)
+        # Team-specific factors
+        injury_factor = self._get_injury_impact(favorite_team, year)
+        draft_factor = 2.0 - self._get_draft_excitement(favorite_team, year)
+        international_factor = 2.0 - self._get_international_boost(favorite_team, year)
         
-        # International player popularity (reduces churn)
-        international_factor = 2.0 - self._get_international_boost(customer_data['favorite_team'], year)
-        
-        # Fantasy/gambling engagement (reduces churn)
+        # Behavioral factors
         fantasy_factor = 2.0 - self._get_fantasy_gambling_effect(customer_data, year)
-        
-        # Viral moment effects (reduces churn temporarily)
         viral_factor = 2.0 - self._get_influencer_viral_boost(year, calendar_month)
         
-        # Technology adoption frustration (older users churning from tech changes)
-        tech_frustration = 1.0
+        # Technology frustration (affects older users)
+        tech_frustration = self._calculate_tech_frustration(customer_data)
+        
+        return (
+            injury_factor * 
+            draft_factor * 
+            international_factor * 
+            fantasy_factor * 
+            viral_factor * 
+            tech_frustration
+        )
+    
+    def _calculate_tech_frustration(self, customer_data: Dict) -> float:
+        """Calculate technology adoption frustration factor for older users."""
         age_group = customer_data['age_group']
         if age_group in ['55-64', '65+']:
             streaming_adoption = self._get_tech_adoption_effect(customer_data, 'streaming')
             if streaming_adoption < 0.5:  # Low tech adoption creates frustration
-                tech_frustration = 1.3
-        
-        # Pricing psychology effect on churn
+                return 1.3
+        return 1.0
         pricing_psychology_factor = self._get_pricing_psychology_effect(customer_data, customer_data['price'])
         pricing_psychology_factor = 2.0 - (pricing_psychology_factor - 1.0) * 0.5  # Convert to churn factor
         
@@ -995,14 +1126,34 @@ class UltraRealisticSyntheticDataGenerator:
             else:
                 return np.random.choice(list(self.nba_teams.keys()))
 
+    # ================================================================
+    # MAIN DATA GENERATION FUNCTIONS
+    # ================================================================
+    # These functions generate the three main datasets:
+    # 1. Customer profiles with demographics and preferences
+    # 2. Team performance data with realistic seasonality
+    # 3. Customer interaction/engagement data with behavioral modeling
+
     def generate_customers(self) -> pd.DataFrame:
-        """Generate enhanced synthetic customer data with demographics and team preferences."""
+        """
+        Generate enhanced synthetic customer data with demographics and team preferences.
+        
+        Creates realistic customer profiles including:
+        - Customer segmentation (casual, regular, avid, super_fan)
+        - Demographics (age, region, income level indicators)
+        - Team preferences and loyalty scores
+        - Behavioral characteristics (price sensitivity, tech adoption)
+        - Psychological factors (brand loyalty, social influence susceptibility)
+        
+        Returns:
+            pd.DataFrame: Customer dataset with comprehensive profiles
+        """
         logger.info(f"Generating {self.num_customers} enhanced synthetic customers")
         
         customers = []
         
         for i in range(self.num_customers):
-            # Assign segment
+            # Assign segment based on configured weights
             segment = np.random.choice(
                 list(self.segment_configs.keys()),
                 p=[config['weight'] for config in self.segment_configs.values()]

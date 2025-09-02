@@ -24,29 +24,29 @@ def analyze_realistic_improvements():
     interactions = pd.read_csv(data_path / "enhanced_customer_interactions.csv")
     team_performance = pd.read_csv(data_path / "enhanced_team_performance.csv")
     
-    print("🏀 REALISTIC BASKETBALL FAN DATA ANALYSIS")
+    print("REALISTIC BASKETBALL FAN DATA ANALYSIS")
     print("=" * 60)
     
     # Advanced demographic analysis
-    print("\\n1. 🧠 PSYCHOLOGICAL & BEHAVIORAL PROFILES")
+    print("\\n1. PSYCHOLOGICAL & BEHAVIORAL PROFILES")
     print("-" * 50)
     
     # Age-based tech behavior analysis
     if 'age_group' in customers.columns:
-        print("📱 Tech Adoption by Age:")
+        print("Tech Adoption by Age:")
         age_counts = customers['age_group'].value_counts()
         for age, count in age_counts.items():
             pct = count / len(customers) * 100
             print(f"   {age}: {count:,} customers ({pct:.1f}%)")
         
         # Analyze team loyalty by age
-        print("\\n🏆 Team Loyalty by Age Group:")
+        print("\\nTeam Loyalty by Age Group:")
         loyalty_by_age = customers.groupby('age_group')['team_loyalty_score'].mean().sort_values(ascending=False)
         for age, loyalty in loyalty_by_age.items():
             print(f"   {age}: {loyalty:.2f} loyalty score")
     
     # Economic and social factors
-    print("\\n2. 💰 ECONOMIC & SOCIAL REALISM")
+    print("\\n2. ECONOMIC & SOCIAL REALISM")
     print("-" * 50)
     
     # Parse dates for time-series analysis
@@ -56,7 +56,7 @@ def analyze_realistic_improvements():
     
     # Engagement trends over time (showing economic impacts)
     yearly_engagement = interactions.groupby('year')['engagement_level'].mean()
-    print("📈 Average Engagement by Year (Economic Impact):")
+    print("Average Engagement by Year (Economic Impact):")
     for year, engagement in yearly_engagement.items():
         print(f"   {year}: {engagement:.3f} - ", end="")
         if year == 2021:
@@ -69,13 +69,13 @@ def analyze_realistic_improvements():
             print("Economic recovery")
     
     # Team performance correlation analysis
-    print("\\n3. 🏀 TEAM PERFORMANCE CORRELATIONS")
+    print("\\n3. TEAM PERFORMANCE CORRELATIONS")
     print("-" * 50)
     
     # Championship effects analysis
     championship_teams = {2021: 'MIL', 2022: 'GSW', 2023: 'DEN', 2024: 'BOS'}
     
-    print("🏆 Championship Impact Analysis:")
+    print("Championship Impact Analysis:")
     for year, champion in championship_teams.items():
         year_data = interactions[interactions['year'] == year]
         champion_fans = customers[customers['favorite_team'] == champion]
@@ -91,7 +91,7 @@ def analyze_realistic_improvements():
             print(f"   {year} {champion}: {boost:+.1f}% engagement boost")
     
     # Seasonal patterns with advanced factors
-    print("\\n4. 🗓️ ADVANCED SEASONAL PATTERNS")
+    print("\\n4. ADVANCED SEASONAL PATTERNS")
     print("-" * 50)
     
     monthly_stats = interactions.groupby('calendar_month').agg({
@@ -108,7 +108,7 @@ def analyze_realistic_improvements():
         9: 'Sep (Preseason)', 10: 'Oct (Season Start)', 11: 'Nov (Regular)', 12: 'Dec (Regular)'
     }
     
-    print("📅 Month-by-Month Fan Behavior:")
+    print("Month-by-Month Fan Behavior:")
     for month in range(1, 13):
         if month in monthly_stats.index:
             stats = monthly_stats.loc[month]
@@ -120,7 +120,7 @@ def analyze_realistic_improvements():
             print(f"     Social: {stats['social_media_interactions']:.1f}")
     
     # Advanced churn analysis
-    print("\\n5. 💔 REALISTIC CHURN MODELING")
+    print("\\n5. REALISTIC CHURN MODELING")
     print("-" * 50)
     
     # Calculate retention rates by segment
@@ -136,13 +136,13 @@ def analyze_realistic_improvements():
             retention_rate = segment_final['is_active'].mean()
             retention_by_segment.append((segment, retention_rate, len(segment_customers)))
     
-    print("🎯 Retention Rates by Customer Segment:")
+    print("Retention Rates by Customer Segment:")
     retention_by_segment.sort(key=lambda x: x[1], reverse=True)
     for segment, retention, count in retention_by_segment:
         print(f"   {segment.title()}: {retention:.1%} retention ({count:,} customers)")
     
     # Social media and viral moment analysis
-    print("\\n6. 📱 SOCIAL MEDIA & VIRAL EFFECTS")
+    print("\\n6. SOCIAL MEDIA & VIRAL EFFECTS")
     print("-" * 50)
     
     # Social media activity by age group
@@ -151,16 +151,16 @@ def analyze_realistic_improvements():
         interactions['age_group'] = interactions['customer_id'].map(customer_age_map)
         
         social_by_age = interactions.groupby('age_group')['social_media_interactions'].mean().sort_values(ascending=False)
-        print("📱 Social Media Activity by Age:")
+        print("Social Media Activity by Age:")
         for age, activity in social_by_age.items():
             if pd.notna(activity):
                 print(f"   {age}: {activity:.1f} interactions/month")
     
     # Regional preferences analysis
-    print("\\n7. 🗺️ REGIONAL LOYALTY PATTERNS")
+    print("\\n7. REGIONAL LOYALTY PATTERNS")
     print("-" * 50)
     
-    print("🏀 Top Team Preferences by Region:")
+    print("Top Team Preferences by Region:")
     for region in customers['region'].unique():
         region_customers = customers[customers['region'] == region]
         top_teams = region_customers['favorite_team'].value_counts().head(3)
@@ -171,13 +171,13 @@ def analyze_realistic_improvements():
             print(f"     {i}. {team}: {count} fans ({pct:.1f}%)")
     
     # Advanced spending analysis
-    print("\\n8. 💰 SOPHISTICATED SPENDING PATTERNS")
+    print("\\n8. SOPHISTICATED SPENDING PATTERNS")
     print("-" * 50)
     
     # Spending by demographic factors
     spending_analysis = customers.groupby(['age_group', 'region'])['price'].mean().unstack()
     
-    print("💳 Average Monthly Price by Age & Region:")
+    print("Average Monthly Price by Age & Region:")
     print("     ", end="")
     for region in spending_analysis.columns:
         print(f"{region[:8]:>8}", end="")
@@ -194,7 +194,7 @@ def analyze_realistic_improvements():
         print()
     
     # Engagement correlation matrix
-    print("\\n9. 🔗 BEHAVIORAL CORRELATION ANALYSIS")
+    print("\\n9. BEHAVIORAL CORRELATION ANALYSIS")
     print("-" * 50)
     
     # Calculate correlations between different behaviors
@@ -205,7 +205,7 @@ def analyze_realistic_improvements():
     if len(available_cols) > 1:
         correlations = interactions[available_cols].corr()
         
-        print("🔍 Behavior Correlation Matrix:")
+        print("Behavior Correlation Matrix:")
         print("     ", end="")
         for col in available_cols:
             print(f"{col[:8]:>8}", end="")
@@ -222,39 +222,39 @@ def analyze_realistic_improvements():
             print()
     
     # Summary of ultra-realistic features
-    print("\\n10. ✨ ULTRA-REALISTIC FEATURE SUMMARY")
+    print("\\n10. ULTRA-REALISTIC FEATURE SUMMARY")
     print("-" * 50)
     
     total_customers = len(customers)
     total_interactions = len(interactions)
     
-    print(f"📊 Dataset Scale:")
-    print(f"   👥 {total_customers:,} customers with psychological profiles")
-    print(f"   📈 {total_interactions:,} interaction records with advanced modeling")
-    print(f"   🏀 {team_performance['team'].nunique()} NBA teams with detailed characteristics")
-    print(f"   📅 {interactions['month'].nunique()} months of temporal data")
+    print(f"Dataset Scale:")
+    print(f"   {total_customers:,} customers with psychological profiles")
+    print(f"   {total_interactions:,} interaction records with advanced modeling")
+    print(f"   {team_performance['team'].nunique()} NBA teams with detailed characteristics")
+    print(f"   {interactions['month'].nunique()} months of temporal data")
     
-    print(f"\\n🧠 Advanced Modeling Features:")
-    print(f"   🎭 Psychological profiles (FOMO, social influence, brand loyalty)")
-    print(f"   💰 Economic factor integration (recession, inflation, unemployment)")
-    print(f"   ⭐ Superstar player effects and career trajectories")
-    print(f"   🏆 Championship dynasty and bandwagon effects")
-    print(f"   📱 Social media viral moments and cultural events")
-    print(f"   🌦️ Weather and geographic impact modeling")
-    print(f"   📺 Streaming vs cable consumption patterns")
-    print(f"   🧮 Competitive sports landscape (NFL overlap)")
-    print(f"   🎯 Realistic churn psychology with 12+ factors")
-    print(f"   📊 Social influence networks and peer effects")
+    print(f"\\nAdvanced Modeling Features:")
+    print(f"   Psychological profiles (FOMO, social influence, brand loyalty)")
+    print(f"   Economic factor integration (recession, inflation, unemployment)")
+    print(f"   Superstar player effects and career trajectories")
+    print(f"   Championship dynasty and bandwagon effects")
+    print(f"   Social media viral moments and cultural events")
+    print(f"   Weather and geographic impact modeling")
+    print(f"   Streaming vs cable consumption patterns")
+    print(f"   Competitive sports landscape (NFL overlap)")
+    print(f"   Realistic churn psychology with 12+ factors")
+    print(f"   Social influence networks and peer effects")
     
-    print(f"\\n🔥 Key Realism Improvements:")
-    print(f"   ⚡ Economic recessions reduce engagement by 15-25%")
-    print(f"   🏆 Championship teams get 40% engagement boost")
-    print(f"   📱 Gen Z shows 3x higher social media activity")
-    print(f"   🌨️ Winter weather reduces Northeast attendance 15%")
-    print(f"   📺 Streaming adoption varies by age (95% for 18-24, 20% for 65+)")
-    print(f"   💫 Viral moments create 15% temporary engagement spikes")
-    print(f"   🎪 Playoff months show 2.5x ticket demand increase")
-    print(f"   💰 Price sensitivity varies by economic conditions")
+    print(f"\\nKey Realism Improvements:")
+    print(f"   Economic recessions reduce engagement by 15-25%")
+    print(f"   Championship teams get 40% engagement boost")
+    print(f"   Gen Z shows 3x higher social media activity")
+    print(f"   Winter weather reduces Northeast attendance 15%")
+    print(f"   Streaming adoption varies by age (95% for 18-24, 20% for 65+)")
+    print(f"   Viral moments create 15% temporary engagement spikes")
+    print(f"   Playoff months show 2.5x ticket demand increase")
+    print(f"   Price sensitivity varies by economic conditions")
     
     # Calculate some key metrics
     playoff_boost = interactions[interactions['is_playoff_month'] == True]['minutes_watched'].mean() / \
@@ -263,13 +263,13 @@ def analyze_realistic_improvements():
     avg_team_loyalty = customers['team_loyalty_score'].mean()
     retention_rate = final_month_active['is_active'].mean()
     
-    print(f"\\n📈 Validation Metrics:")
-    print(f"   🏆 Playoff viewing boost: {(playoff_boost-1)*100:.1f}%")
-    print(f"   ❤️ Average team loyalty: {avg_team_loyalty:.2f}")
-    print(f"   📊 Overall retention rate: {retention_rate:.1%}")
-    print(f"   💸 Total revenue generated: ${interactions['merch_spend'].sum():,.2f}")
+    print(f"\\nValidation Metrics:")
+    print(f"   Playoff viewing boost: {(playoff_boost-1)*100:.1f}%")
+    print(f"   Average team loyalty: {avg_team_loyalty:.2f}")
+    print(f"   Overall retention rate: {retention_rate:.1%}")
+    print(f"   Total revenue generated: ${interactions['merch_spend'].sum():,.2f}")
     
-    print(f"\\n🎯 ULTRA-REALISTIC DATA GENERATION COMPLETE!")
+    print(f"\\nULTRA-REALISTIC DATA GENERATION COMPLETE!")
     print(f"   This dataset now models real-world complexity with:")
     print(f"   • Economic cycles and their psychological impact")
     print(f"   • Social influence networks and viral phenomena") 
@@ -299,7 +299,7 @@ def create_advanced_visualizations():
     yearly_engagement = interactions.groupby('year')['engagement_level'].mean()
     colors = ['red', 'orange', 'yellow', 'green']  # Representing economic conditions
     bars = ax1.bar(yearly_engagement.index.tolist(), yearly_engagement.values.tolist(), color=colors, alpha=0.7)
-    ax1.set_title('📈 Economic Impact on Fan Engagement')
+    ax1.set_title('Economic Impact on Fan Engagement')
     ax1.set_xlabel('Year')
     ax1.set_ylabel('Average Engagement Level')
     ax1.grid(True, alpha=0.3)
@@ -331,7 +331,7 @@ def create_advanced_visualizations():
     if champion_data:
         labels, boosts = zip(*champion_data)
         bars = ax2.bar(labels, boosts, color='gold', alpha=0.8)
-        ax2.set_title('🏆 Championship Team Fan Engagement Boost')
+        ax2.set_title('Championship Team Fan Engagement Boost')
         ax2.set_ylabel('Engagement Boost (%)')
         ax2.grid(True, alpha=0.3)
         ax2.axhline(y=0, color='black', linestyle='-', alpha=0.5)
@@ -347,7 +347,7 @@ def create_advanced_visualizations():
     bars = ax3.barh(range(len(social_by_age)), social_by_age.values.tolist(), color='skyblue', alpha=0.7)
     ax3.set_yticks(range(len(social_by_age)))
     ax3.set_yticklabels(social_by_age.index)
-    ax3.set_title('📱 Social Media Activity by Age')
+    ax3.set_title('Social Media Activity by Age')
     ax3.set_xlabel('Avg Interactions/Month')
     ax3.grid(True, alpha=0.3, axis='x')
     
@@ -367,7 +367,7 @@ def create_advanced_visualizations():
             season_colors.append('green')
     
     bars = ax4.bar(monthly_engagement.index.tolist(), monthly_engagement.values.tolist(), color=season_colors, alpha=0.7)
-    ax4.set_title('🗓️ NBA Seasonal Engagement Patterns')
+    ax4.set_title('NBA Seasonal Engagement Patterns')
     ax4.set_xlabel('Month')
     ax4.set_ylabel('Engagement Level')
     ax4.grid(True, alpha=0.3)
@@ -400,7 +400,7 @@ def create_advanced_visualizations():
     if market_loyalty_avg:
         markets, avg_loyalty = zip(*market_loyalty_avg.items())
         bars = ax5.bar(markets, avg_loyalty, color=['lightcoral', 'lightblue', 'lightgreen'], alpha=0.7)
-        ax5.set_title('🏙️ Team Loyalty by Market Size')
+        ax5.set_title('Team Loyalty by Market Size')
         ax5.set_ylabel('Average Loyalty Score')
         ax5.grid(True, alpha=0.3)
     
@@ -412,7 +412,7 @@ def create_advanced_visualizations():
                     color='lightgreen', alpha=0.7)
     ax6.set_yticks(range(len(regional_spending)))
     ax6.set_yticklabels(regional_spending.index)
-    ax6.set_title('💰 Regional Spending Patterns')
+    ax6.set_title('Regional Spending Patterns')
     ax6.set_xlabel('Average Monthly Price ($)')
     ax6.grid(True, alpha=0.3, axis='x')
     
@@ -437,7 +437,7 @@ def create_advanced_visualizations():
         
         colors = ['red', 'orange', 'yellow', 'green']
         bars = ax7.bar(segments, churn_rates, color=colors, alpha=0.7)
-        ax7.set_title('💔 Churn Rate by Customer Segment')
+        ax7.set_title('Churn Rate by Customer Segment')
         ax7.set_ylabel('Churn Rate')
         ax7.grid(True, alpha=0.3)
         
@@ -463,7 +463,7 @@ def create_advanced_visualizations():
         bars1 = ax8.bar(x - width/2, regular_means, width, label='Regular Season', color='lightblue', alpha=0.7)
         bars2 = ax8.bar(x + width/2, playoff_means, width, label='Playoffs', color='gold', alpha=0.7)
         
-        ax8.set_title('🏀 Playoff vs Regular Season Behavior')
+        ax8.set_title('Playoff vs Regular Season Behavior')
         ax8.set_xticks(x)
         ax8.set_xticklabels([m.replace('_', ' ').title() for m in metrics[:len(playoff_means)]])
         ax8.legend()
@@ -486,7 +486,7 @@ def create_advanced_visualizations():
         p = np.poly1d(z)
         ax9.plot(x_vals, p(x_vals), "r--", alpha=0.8)
         
-        ax9.set_title('📊 Team Performance vs Fan Engagement')
+        ax9.set_title('Team Performance vs Fan Engagement')
         ax9.set_xlabel('Team Win Rate')
         ax9.set_ylabel('Fan Engagement Level')
         ax9.grid(True, alpha=0.3)
@@ -499,7 +499,7 @@ def create_advanced_visualizations():
     plt.savefig(output_path / "ultra_realistic_synthetic_data_analysis.png", 
                 dpi=300, bbox_inches='tight')
     
-    print(f"\\n📊 Advanced visualization saved to: {output_path / 'ultra_realistic_synthetic_data_analysis.png'}")
+    print(f"\\nAdvanced visualization saved to: {output_path / 'ultra_realistic_synthetic_data_analysis.png'}")
     plt.show()
 
 
