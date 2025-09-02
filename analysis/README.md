@@ -25,7 +25,7 @@ rfm_data = calculate_rfm_scores(customer_interactions)
 segment_profiles = analyze_customer_segments(customers, interactions)
 ```
 
-### `ultra_realistic_analysis.py`
+### `behavioral_analysis.py`
 **Purpose**: Advanced behavioral analysis with detailed modeling insights
 
 **Key Features**:
@@ -45,11 +45,11 @@ segment_profiles = analyze_customer_segments(customers, interactions)
 
 **Usage**:
 ```python
-# Run complete ultra-realistic analysis
-python -c "from analysis.ultra_realistic_analysis import main; main()"
+# Run complete behavioral analysis
+python -c "from analysis.behavioral_analysis import main; main()"
 
 # Or import specific functions
-from analysis.ultra_realistic_analysis import analyze_economic_impact
+from analysis.behavioral_analysis import analyze_economic_impact
 economic_insights = analyze_economic_impact(interactions_data)
 ```
 
@@ -98,7 +98,7 @@ economic_insights = analyze_economic_impact(interactions_data)
 ### Basic Analysis Workflow
 ```python
 from analysis.data_analysis import *
-from analysis.ultra_realistic_analysis import main as run_ultra_analysis
+from analysis.behavioral_analysis import main as run_behavioral_analysis
 
 # 1. Load and validate data
 customers, interactions = load_and_validate_data()
@@ -108,7 +108,7 @@ rfm_analysis = calculate_rfm_scores(interactions)
 segment_profiles = analyze_customer_segments(customers, interactions)
 
 # 3. Generate advanced insights
-run_ultra_analysis()  # Comprehensive analysis with visualizations
+run_behavioral_analysis()  # Comprehensive analysis with visualizations
 ```
 
 ### Custom Analysis
@@ -139,13 +139,13 @@ modeling_data = prepare_modeling_features(
 ## Output Files
 
 ### Analysis Reports
-- **ultra_realistic_analysis_report.txt** - Detailed text analysis report
+- **behavioral_analysis_report.txt** - Detailed text analysis report
 - **customer_segment_profiles.csv** - Customer segmentation results
 - **engagement_trend_analysis.csv** - Temporal pattern analysis
 - **economic_impact_analysis.csv** - Economic factor correlations
 
 ### Visualizations
-- **ultra_realistic_synthetic_data_analysis.png** - 9-panel comprehensive dashboard
+- **behavioral_analysis_dashboard.png** - 9-panel comprehensive dashboard
 - **customer_segment_distribution.png** - Segment breakdown visualizations
 - **engagement_trends_by_segment.png** - Temporal engagement patterns
 - **economic_correlation_heatmap.png** - Economic factor impact analysis

@@ -1,6 +1,6 @@
 """
-Realistic Synthetic Basketball Fan Data Analysis
-Showcases behavioral modeling and real-world factors
+Basketball Fan Behavioral Analysis
+Advanced analysis of fan behavior patterns, psychological profiles, and economic factors
 """
 
 import pandas as pd

@@ -259,7 +259,7 @@ basketball_fan_retention/
 │
 ├── analysis/                    # Analysis Modules
 │   ├── data_analysis.py             # Core data analysis functions
-│   └── ultra_realistic_analysis.py  # Advanced behavioral analysis
+│   └── behavioral_analysis.py       # Advanced behavioral analysis
 │
 ├── docs/                        # Documentation
 │   ├── research_citations.md        # Academic references
