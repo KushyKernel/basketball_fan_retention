@@ -1,0 +1,140 @@
+# Basketball Fan Retention & Revenue Optimization
+# Example Configuration File
+# Copy this to config.yaml and customize for your environment
+
+# API Configuration
+apis:
+  ball_dont_lie:
+    base_url: "https://www.balldontlie.io/api/v1"
+    api_key: "your_api_key_here"  # Optional, for rate limit increases
+    rate_limit: 60  # requests per minute
+    
+  basketball_reference:
+    base_url: "https://www.basketball-reference.com"
+    rate_limit: 20  # requests per minute
+    cache_duration: 3600  # seconds
+
+# Data Configuration
+data:
+  # Synthetic data generation parameters
+  synthetic:
+    n_customers: 10000
+    date_range:
+      start: "2021-01-01"
+      end: "2025-09-01"  # Updated to current date (September 2025)
+    
+    # Customer segment distributions
+    segments:
+      casual: 0.4
+      regular: 0.3
+      avid: 0.2
+      super_fan: 0.1
+    
+    # Interaction patterns
+    interaction_rates:
+      casual: [0.1, 0.3]      # min, max monthly interactions
+      regular: [0.5, 1.5]
+      avid: [1.0, 3.0]
+      super_fan: [2.0, 5.0]
+  
+  # Data splitting
+  train_test_split:
+    train_end: "2023-06-30"
+    val_end: "2023-09-30"
+    test_end: "2024-01-01"
+  
+  # Feature engineering
+  features:
+    lookback_months: 12
+    min_interactions: 3
+    rfm_quantiles: 5
+
+# Model Configuration
+models:
+  churn:
+    algorithms:
+      - logistic_regression
+      - random_forest
+      - xgboost
+    
+    # Hyperparameter grids
+    hyperparameters:
+      logistic_regression:
+        C: [0.01, 0.1, 1.0, 10.0]
+        max_iter: [1000]
+      
+      random_forest:
+        n_estimators: [100, 200, 300]
+        max_depth: [10, 20, null]
+        min_samples_split: [2, 5, 10]
+      
+      xgboost:
+        n_estimators: [100, 200, 300]
+        max_depth: [3, 6, 10]
+        learning_rate: [0.01, 0.1, 0.2]
+        subsample: [0.8, 1.0]
+    
+    # Model evaluation
+    cv_folds: 5
+    scoring: "roc_auc"
+    threshold_method: "precision_recall"  # or "roc"
+  
+  clv:
+    discount_rate: 0.1  # annual
+    prediction_horizon: 12  # months
+    
+    survival:
+      model_type: "cox"  # cox proportional hazards
+      alpha: 0.05  # for confidence intervals
+
+# Optimization Configuration
+optimization:
+  offer_allocation:
+    budget: 100000  # total budget
+    min_allocation: 0.05  # minimum 5% per segment
+    max_allocation: 0.5   # maximum 50% per segment
+    
+    # Expected response rates by offer type and segment
+    response_rates:
+      discount_10:
+        casual: 0.05
+        regular: 0.08
+        avid: 0.12
+        super_fan: 0.15
+      
+      discount_20:
+        casual: 0.08
+        regular: 0.15
+        avid: 0.25
+        super_fan: 0.30
+      
+      premium_content:
+        casual: 0.02
+        regular: 0.05
+        avid: 0.15
+        super_fan: 0.25
+
+# Paths (relative to project root)
+paths:
+  data:
+    raw: "data/raw"
+    processed: "data/processed"
+    models: "data/models"
+  
+  notebooks: "notebooks"
+  reports: "reports"
+  logs: "logs"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  handlers:
+    console: true
+    file: true
+    
+  files:
+    main: "logs/basketball_retention.log"
+    data: "logs/data_collection.log"
+    model: "logs/modeling.log"
